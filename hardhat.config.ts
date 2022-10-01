@@ -1,24 +1,31 @@
-require("@nomiclabs/hardhat-waffle");
-require("@nomiclabs/hardhat-etherscan")
-// require("dotenv").config({ path: ".env" });
+//require("@nomiclabs/hardhat-waffle");
+require("@nomiclabs/hardhat-etherscan");
+import "@nomiclabs/hardhat-ethers";
+require("dotenv").config({ path: ".env" });
 
-const GOERLI_API_KEY_URL = process.env.GOERLI_API_KEY_URL;
 
-const PRIVATE_KEY = process.env.PRIVATE_KEY;
+const ALCHEMY_GOERLI_API_KEY_URL = process.env.ALCHEMY_GOERLI_API_KEY_URL;
+//contract address key
+const ACCOUNT_PRIVATE_KEY = process.env.ACCOUNT_PRIVATE_KEY;
+//beneficial address key
+const ACCOUNT_PRIVATE_KEY2 = process.env.ACCOUNT_PRIVATE_KEY2;
 
-const API_TOKEN = process.env.API_TOKEN;
+const INFURA_MAINNET_API_URL = process.env.INFURA_MAINNET_API_KEY_URL;
 
 module.exports = {
-  solidity: "0.8.10",
+  solidity: "0.8.0",
   networks: {
-    goerli: {
-      url: "https://eth-goerli.g.alchemy.com/v2/FVhKzRogIAlI_zgqGdtgyVzZYTL9_yct",
-      accounts: ["e550d9f280f76bbd7438cbeaf03453f899fd83588cf3f2312143c22b7dc025c0"],
+    hardhat: {
+      forking:{
+        url: INFURA_MAINNET_API_URL,
+      }
     },
+    goerli: {
+      url: ALCHEMY_GOERLI_API_KEY_URL,
+      accounts: [ACCOUNT_PRIVATE_KEY],
+    }
   },
   etherscan: {
-    apiKey: "GMSKNX6XU6KESUH67CV5F6ZJIEEF2ZPVP8"
-  },
-  lockGasLimit: 200000000000,
-  gasPrice: 10000000000,
+    apiKey: "API_TOKEN"
+  }
 };
