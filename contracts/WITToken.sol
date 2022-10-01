@@ -2,11 +2,22 @@
 pragma solidity ^0.8.9;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+
 // import "solmate/tokens/ERC20.sol";
 
 contract WITToken is ERC20("Women In Tech Token", "WITT"){
-  constructor(address user) {
-      _mint(user, 2000000e18);
+
+
+  constructor() {
+      _mint(address(this), 2000000e18);
   }
 
+ function withdrawFromContract(address _to, uint _amount) public {
+      uint currentBalance = balanceOf(address(this));
+      uint withdrawAmount = _amount;
+      require(currentBalance >= withdrawAmount, "Not enough money to transfer");
+      _transfer(address(this), _to, withdrawAmount);
+  }
+    
 }
+

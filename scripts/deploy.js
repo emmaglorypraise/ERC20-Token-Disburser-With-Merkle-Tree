@@ -1,4 +1,3 @@
-// import { ethers } from "hardhat";
 const { MerkleTree } = require("merkletreejs");
 const keccak256 = require("keccak256");
 const csv = require("csv-parser");
@@ -18,16 +17,13 @@ async function main() {
     ///files for each ardrop
     // import distribution from this file
     
-    const filename = "address-list.csv";
+    const filename = "gen_files/address-list.csv";
   
     // what file should we write the merkel proofs too?
-    const output_file = "gen_files/dropTicket/drop_ticket_roots.json";
+    const output_file = "gen_files/drop_ticket_roots.json";
   
     //file that has the user claim list
-    const userclaimFile = "gen_files/dropTicket/drop_ticket_claimlist.json";
-  
-    //contract of items being sent out
-    const airdropContract = "0xb08D7F9B022aE5a7e42F892b2F05Ad2FA77FDbf5";
+    const userclaimFile = "gen_files/drop_ticket_claimlist.json";
   
     // used to store one leaf for each line in the distribution file
     const token_dist = [];
@@ -39,7 +35,7 @@ async function main() {
     fs.createReadStream(filename)
       .pipe(csv())
       .on("data", (row) => {
-        const user_dist = [row["user-address"], row["user-amount"]]; // create record to track user_id of leaves
+        const user_dist = [row["user-address"], row["amount"]]; // create record to track user_id of leaves
         console.log(user_dist);
         const leaf_hash = ethers.utils.solidityKeccak256(
           ["address", "uint256"],
@@ -86,14 +82,12 @@ async function main() {
   
         let dropObjs = {
           dropDetails: {
-            contractAddress: airdropContract,
             merkleroot: root,
           },
         };
   
         for (line = 0; line < user_dist_list.length; line++) {
           const other = user_dist_list[line];
-          // console.log(gotchi_dist_list[line])
           const user_claim = {
             address: other[0],
             amount: other[1],
